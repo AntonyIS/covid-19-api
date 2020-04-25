@@ -1,38 +1,49 @@
-from api import app
+from flask import request
+
+from api import app, jsonify
+from api.models import Country, State
 
 
-@app.route('/')
+@app.route('/covid19')
 def index():
     # Landing page for the API Site
+    print(request.headers)
     return "Landing page"
 
 
-@app.route('/api/v1/countries')
+@app.route('/covid19/api/v1/countries')
 def get_countries():
     # Returns all countries with covid-19 cases
-    return "Countries"
+    return jsonify(countries=[c.serialize_country() for c in Country.query.all()])
 
 
-@app.route('/api/v1/countries/<int:country_id>')
+@app.route('/covid19/api/v1/countries/<int:country_id>')
 def get_country(country_id):
     # Returns a country with covid-19 cases given country_id
-    return "Country"
+    return jsonify({
+        "country":Country.query.get(country_id).serialize_country(),
+    })
 
 
-@app.route('/api/v1/states')
+@app.route('/covid19/api/v1/states')
 def get_states():
     # Returns all states with covid-19 cases given
-    return "States"
+    return jsonify(states=[state.serialize(state) for state in State.query.all()])
 
 
-@app.route('/api/v1/states/<int:states_id>')
-def get_state(states_id):
+@app.route('/covid19/api/v1/states/<int:state_id>')
+def get_state(state_id):
     # Returns a state with covid-19 cases given state_id
-    return "State"
+    try:
+        return jsonify({
+            "state": State.query.get(state_id).serialize(State.query.get(state_id)),
+        })
+    except:
+        return "no states"
 
 
 # Authentication routes
-@app.route('/api/v1/login')
+@app.route('/covid19/api/v1/login')
 def login_user():
     # Login using Social auth
     return "login"
