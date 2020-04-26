@@ -66,7 +66,7 @@ class State(db.Model):
 
     def serialize(self, state, id=None):
         return {
-            "id":id,
+            "id":state.id,
             "name" : state.name,
             "country_name" : state.country_name,
             "total_infected" : state.total_infected,

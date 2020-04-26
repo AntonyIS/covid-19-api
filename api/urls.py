@@ -1,23 +1,20 @@
-from flask import request
-
-from api import app, jsonify
+from api import app, jsonify, Response
 from api.models import Country, State
 
 
-@app.route('/covid19')
+@app.route('/covid19', methods=['GET'])
 def index():
     # Landing page for the API Site
-    print(request.headers)
     return "Landing page"
 
 
-@app.route('/covid19/api/v1/countries')
+@app.route('/covid19/api/v1/countries', methods=['GET'])
 def get_countries():
     # Returns all countries with covid-19 cases
     return jsonify(countries=[c.serialize_country() for c in Country.query.all()])
 
 
-@app.route('/covid19/api/v1/countries/<int:country_id>')
+@app.route('/covid19/api/v1/countries/<int:country_id>', methods=['GET'])
 def get_country(country_id):
     # Returns a country with covid-19 cases given country_id
     return jsonify({
@@ -25,13 +22,13 @@ def get_country(country_id):
     })
 
 
-@app.route('/covid19/api/v1/states')
+@app.route('/covid19/api/v1/states', methods=['GET'])
 def get_states():
     # Returns all states with covid-19 cases given
     return jsonify(states=[state.serialize(state) for state in State.query.all()])
 
 
-@app.route('/covid19/api/v1/states/<int:state_id>')
+@app.route('/covid19/api/v1/states/<int:state_id>', methods=['GET'])
 def get_state(state_id):
     # Returns a state with covid-19 cases given state_id
     try:
