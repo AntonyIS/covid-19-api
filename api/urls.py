@@ -2,10 +2,10 @@ from api import app, jsonify, Response
 from api.models import Country, State
 
 
-@app.route('/covid19', methods=['GET'])
-def index():
-    # Landing page for the API Site
-    return "Landing page"
+# @app.route('/covid19', methods=['GET'])
+# def index():
+#     # Landing page for the API Site
+#     return 'home'
 
 
 @app.route('/covid19/api/v1/countries', methods=['GET'])
@@ -37,6 +37,42 @@ def get_state(state_id):
         })
     except:
         return "no states"
+
+# Total data
+@app.route('/covid19/api/v1/sum', methods=['GET'])
+def get_sum():
+    countries = Country.query.all()
+    total_infected = 0
+    infected_today = 0
+    total_deaths = 0
+    deaths_today = 0
+    total_recovered= 0
+    recovered_today = 0
+    active = critical = 0
+    tests = 0
+    for country in countries:
+        total_infected += country.total_infected
+        infected_today += country.infected_today
+        total_deaths += country.total_deaths
+        deaths_today += country.deaths_today
+        total_recovered += country.total_recovered
+        recovered_today += country.recovered_today
+        active += country.active
+        critical += country.critical
+        tests += country.tests
+    return jsonify({
+            "data":{
+                "total_infected":total_infected,
+                "infected_today":infected_today,
+                "total_deaths": total_deaths,
+                "deaths_today":deaths_today,
+                "total_recovered": total_recovered,
+                "recovered_today": recovered_today,
+                "active": active,
+                "critical":critical,
+                "tests":tests
+            }
+        })
 
 
 # Authentication routes

@@ -39,6 +39,9 @@ class Scrapper:
         # Initializes URL_COUNTRIES_FLAGS variables that points to the site to be scapped
         self.URL_COUNTRIES_FLAGS = "https://flaglog.com/"
 
+        # Initializes URL_COUNTRIES_FLAGS variables that points to the site to be scapped
+        self.URL_MORTALITY = "https://coronavirus.jhu.edu/data/mortality/"
+
     def add_states(self, country_name):
         name = country_name
         # scraps data about country's states from source and stores then in DB
@@ -100,6 +103,9 @@ class Scrapper:
         # Scraps data(flag images) for countries from source and stores them in the images folder
         # country_name : takes country_name as argument to download the flag image
         pass
+
+
+
 
 
 class Serializer:

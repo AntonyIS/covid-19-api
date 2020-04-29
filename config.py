@@ -9,6 +9,13 @@ class Config(object):
     Define core settings for the app
     """
     # Defines the location of the api db
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "api.db")
+    ENV = 'prod'
 
+    if ENV == 'dev':
+        debug = True
+        # SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "api.db")
+        SQLALCHEMY_DATABASE_URI = "postgresql://postgres:GeoDev@localhost/covidapi"
+    else:
+        debug = 'False'
+        SQLALCHEMY_DATABASE_URI = "postgres://mozhnghyvetbvr:86b2c83ff9c3057e870100932398b53b40bb7d7e212e34d245d82f9008aaeb53@ec2-52-87-135-240.compute-1.amazonaws.com:5432/d438kerhs0i6rc"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
