@@ -2,10 +2,10 @@ from api import app, jsonify, Response
 from api.models import Country, State
 
 
-# @app.route('/covid19', methods=['GET'])
-# def index():
-#     # Landing page for the API Site
-#     return 'home'
+@app.route('/', methods=['GET'])
+def index():
+    # Landing page for the API Site
+    return 'home'
 
 
 @app.route('/covid19/api/v1/countries', methods=['GET'])
