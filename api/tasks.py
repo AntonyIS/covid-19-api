@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
-from flask import session
-import json
+from celery.beat import logger
+
 from api import db, jsonify
 from api.models import Country,State
 
-
+from api import celery
 def rename(name):
     name = name.split()
     if name is None:
@@ -53,7 +53,6 @@ class Scrapper:
             tbody = soup.find("tbody")
             for tr in tbody.find_all("tr"):
                 tds = tr.find_all("td")
-                print((tds[0].text).strip())
                 state_sample = State(
                     name= (tds[0].text).strip(),
                     country_name = name,
@@ -75,6 +74,7 @@ class Scrapper:
 
     def add_countries(self):
         # scraps data about countries from source and stores it the DB
+
         page = requests.get(self.URL_COUNTRIES)
         soup = BeautifulSoup(page.content, 'html.parser')
         tbody = soup.find("tbody")
@@ -97,15 +97,13 @@ class Scrapper:
             db.session.add(country_sample)
             db.session.commit()
             self.add_states(name)
+            print(name)
         print("Done...")
 
     def add_flags(self, country_name):
         # Scraps data(flag images) for countries from source and stores them in the images folder
         # country_name : takes country_name as argument to download the flag image
         pass
-
-
-
 
 
 class Serializer:
@@ -131,10 +129,11 @@ class Serializer:
         return jsonify(state=[s.serialize for s in self.states])
 
 
-test = Scrapper()
-test.add_countries()
-#
-# ser = Serializer()
-# ser.get_countries()
-#
-
+@celery.task()
+def scrapper_task():
+    print("Start task")
+    scrapper = Scrapper()
+    db.drop_all()
+    db.create_all()
+    scrapper.add_countries()
+    print("Ending Tasks")
