@@ -108,9 +108,9 @@ def login_user():
 @app.errorhandler(404)
 def not_found(e):
     return jsonify({
+        "countries" : "https://covid19-datamap-api.herokuapp.com/covid19/api/v1/countries",
+        "country" : "https://covid19-datamap-api.herokuapp.com/covid19/api/v1/countries/<country_id>",
         "error": "resource does not exist",
-        "countries_route" : "https://covid19-datamap-api.herokuapp.com/covid19/api/v1/countries",
-        "countr7_route" : "https://covid19-datamap-api.herokuapp.com/covid19/api/v1/countries/<country_id>",
     })
 
 
