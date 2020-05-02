@@ -13,6 +13,6 @@ CELERYBEAT_SCHEDULE = {
     'test-celery': {
         'task': 'api.tasks.scrapper_task',
         # Every  minute
-        'schedule': crontab(minute=3),
+        'schedule': crontab(minute="*"),
     }
 }
