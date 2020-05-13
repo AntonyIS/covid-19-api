@@ -4,7 +4,7 @@ from config import Config
 from flask_migrate import Migrate
 from celery import Celery
 from datetime import timedelta
-import celeryconfig
+# import celeryconfig
 
 def make_celery(app):
     celery = Celery(app.import_name,backend=app.config['CELERY_RESULT_BACKEND'],broker=app.config['CELERY_BROKER_URL'])
@@ -21,20 +21,20 @@ app = Flask(__name__)
 
 
 app.config.from_object(Config)
-app.config.update(CELERY_BROKER_URL='redis://localhost:6379',CELERY_RESULT_BACKEND='redis://localhost:6379')
-celery = make_celery(app)
-celery.config_from_object(celeryconfig)
+# app.config.update(CELERY_BROKER_URL='redis://localhost:6379',CELERY_RESULT_BACKEND='redis://localhost:6379')
+# celery = make_celery(app)
+# celery.config_from_object(celeryconfig)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-app.config['CELERYBEAT_SCHEDULE'] = {
-    # Executes every minute
-    'periodic_task-every-minute': {
-        'task': 'api.urls.taskscrapper',
-        'schedule': timedelta(seconds=30)
-    }
-}
+# app.config['CELERYBEAT_SCHEDULE'] = {
+#     # Executes every minute
+#     'periodic_task-every-minute': {
+#         'task': 'api.urls.taskscrapper',
+#         'schedule': timedelta(seconds=30)
+#     }
+# }
 
 
 from api import models, urls, tasks

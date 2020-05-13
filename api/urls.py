@@ -1,20 +1,6 @@
-from celery.beat import logger
-
 from api import app, jsonify,Response, db
 from api.models import Country, State
 from api.tasks import Scrapper
-from api import celery
-
-
-
-
-
-
-# @app.route('/', methods=['GET'])
-# def index():
-#     db.drop_all()
-#     db.create_all()
-#     return 'home'
 
 @app.route('/covid19/api/v1/countries', methods=['GET'])
 def get_countries():

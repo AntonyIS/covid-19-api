@@ -1,11 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
-from celery.beat import logger
-
 from api import db, jsonify
 from api.models import Country,State
 
-from api import celery
 def rename(name):
     name = name.split()
     if name is None:
@@ -46,7 +43,6 @@ class Scrapper:
         name = country_name
         # scraps data about country's states from source and stores then in DB
         country_name = rename(country_name)
-
         try:
             page = requests.get(self.URL_COUNTRIES + "country/" + country_name)
             soup = BeautifulSoup(page.content, 'html.parser')
@@ -66,7 +62,6 @@ class Scrapper:
                     critical = int((tds[8].text).replace(',', '')),
                     tests = int((tds[9].text).replace(',', '')),
                 )
-
                 db.session.add(state_sample)
                 db.session.commit()
         except:
@@ -74,7 +69,6 @@ class Scrapper:
 
     def add_countries(self):
         # scraps data about countries from source and stores it the DB
-
         page = requests.get(self.URL_COUNTRIES)
         soup = BeautifulSoup(page.content, 'html.parser')
         tbody = soup.find("tbody")
@@ -105,6 +99,14 @@ class Scrapper:
         # country_name : takes country_name as argument to download the flag image
         pass
 
+    def job(self):
+        print("Start task...")
+        scrapper = Scrapper()
+        db.drop_all()
+        db.create_all()
+        scrapper.add_countries()
+        print("Ending Tasks...")
+
 
 class Serializer:
     """
@@ -129,11 +131,14 @@ class Serializer:
         return jsonify(state=[s.serialize for s in self.states])
 
 
-@celery.task()
-def scrapper_task():
-    print("Start task")
-    scrapper = Scrapper()
-    db.drop_all()
-    db.create_all()
-    scrapper.add_countries()
-    print("Ending Tasks")
+
+
+#
+# @celery.task()
+# def scrapper_task():
+#     print("Start task")
+#     scrapper = Scrapper()
+#     db.drop_all()
+#     db.create_all()
+#     scrapper.add_countries()
+#     print("Ending Tasks")
