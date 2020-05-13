@@ -1,6 +1,6 @@
 from api import app, jsonify,Response, db
 from api.models import Country, State
-from api.tasks import Scrapper
+
 
 @app.route('/covid19/api/v1/countries', methods=['GET'])
 def get_countries():
@@ -102,4 +102,7 @@ def not_found(e):
 
 @app.errorhandler(500)
 def internal_error(e):
-    return "Internal server error", 500
+    return jsonify({
+        "message": "Internal server error",
+        "Error" : e
+    }), 500
