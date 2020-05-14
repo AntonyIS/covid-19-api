@@ -1,4 +1,9 @@
-from api import db, jsonify
+from api import db
+
+
+def rev_normalize(country_name):
+    name = country_name.lower().split()
+    return "-".join(name)
 
 
 class Country(db.Model):
@@ -19,12 +24,12 @@ class Country(db.Model):
     active = db.Column(db.Integer, default=0)
     critical = db.Column(db.Integer, default=0)
     tests = db.Column(db.Integer, default=0)
+    url = db.Column(db.String)
 
     def __repr__(self):
         return self.name
 
     def serialize_country(self):
-
         return {
             "id": self.id,
             "name" : self.name,
@@ -38,9 +43,10 @@ class Country(db.Model):
             "active" : self.active,
             "critical" : self.critical,
             "tests" : self.tests,
-            "states" : [state.serialize(state) for state in State.query.filter_by(country_name=self.name).all()]
+            "url":" http://127.0.0.1:5000/covid19/api/v1/countries/{}".format(rev_normalize(self.name))
 
         }
+
 
 
 class State(db.Model):
@@ -64,18 +70,20 @@ class State(db.Model):
     def __repr__(self):
         return self.name
 
-    def serialize(self, state, id=None):
+
+    def serialize_state(self, id=None):
         return {
-            "id":state.id,
-            "name" : state.name,
-            "country_name" : state.country_name,
-            "total_infected" : state.total_infected,
-            "infected_today" : state.infected_today,
-            "total_deaths" : state.total_deaths,
-            "deaths_today" : state.deaths_today,
-            "total_recovered" : state.total_recovered,
-            "recovered_today" : state.recovered_today,
-            "active" : state.active,
-            "critical" : state.critical,
-            "tests" : state.tests
+            "id":self.id,
+            "name" : self.name,
+            "country_name" : self.country_name,
+            "total_infected" : self.total_infected,
+            "infected_today" : self.infected_today,
+            "total_deaths" : self.total_deaths,
+            "deaths_today" : self.deaths_today,
+            "total_recovered" : self.total_recovered,
+            "recovered_today" : self.recovered_today,
+            "active" : self.active,
+            "critical" : self.critical,
+            "tests" : self.tests,
+            "url": " http://127.0.0.1:5000/covid19/api/v1/countries/{}/states/{}".format(rev_normalize(self.country_name),rev_normalize(self.name))
         }

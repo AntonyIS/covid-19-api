@@ -91,21 +91,11 @@ class Scrapper:
             db.session.add(country_sample)
             db.session.commit()
             self.add_states(name)
-            print(name)
-        print("Done...")
 
     def add_flags(self, country_name):
         # Scraps data(flag images) for countries from source and stores them in the images folder
         # country_name : takes country_name as argument to download the flag image
         pass
-
-    def job(self):
-        print("Start task...")
-        scrapper = Scrapper()
-        db.drop_all()
-        db.create_all()
-        scrapper.add_countries()
-        print("Ending Tasks...")
 
 
 class Serializer:
@@ -120,7 +110,8 @@ class Serializer:
         # serialize countries
         # return jsonify(country=[c.serialize_country() for c in self.countries])
         for c in self.countries:
-            print(c.serialize_country())
+            # print(c.serialize_country())
+            pass
 
     def get_country(self, country_id):
         # serialize country with given ID
@@ -130,15 +121,10 @@ class Serializer:
     def get_states_(self):
         return jsonify(state=[s.serialize for s in self.states])
 
-
-
-
-#
-# @celery.task()
-# def scrapper_task():
-#     print("Start task")
-#     scrapper = Scrapper()
-#     db.drop_all()
-#     db.create_all()
-#     scrapper.add_countries()
-#     print("Ending Tasks")
+def job():
+    print("Start task...")
+    scrapper = Scrapper()
+    db.drop_all()
+    db.create_all()
+    scrapper.add_countries()
+    print("Ending Tasks...")

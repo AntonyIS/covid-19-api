@@ -2,26 +2,72 @@ from api import app, jsonify,Response, db
 from api.models import Country, State
 
 
+def normalize(country_name):
+    names = [name.capitalize() for name in country_name.replace("-", " ").split()]
+    return " ".join(names)
+
+def rev_normalize(country_name):
+    name = country_name.lower().split()
+    return "-".join(name)
+
+
+
 @app.route('/covid19/api/v1/countries', methods=['GET'])
 def get_countries():
     countries = Country.query.all()
-    print(len(countries))
     if len(countries) <= 0 :
         return jsonify({"message": "No data available"})
     else:
         # Returns all countries with covid-19 cases
-        return jsonify(countries=[c.serialize_country() for c in countries])
+        return jsonify(countries=[country.serialize_country() for country in countries])
 
 
-@app.route('/covid19/api/v1/countries/<int:country_id>', methods=['GET'])
-def get_country(country_id):
-    country = Country.query.get(country_id)
+@app.route('/covid19/api/v1/countries/<string:country_name>', methods=['GET'])
+def get_country(country_name):
+    country = Country.query.filter_by(name=country_name).first()
     if country is None:
         return jsonify({"message": "data does not exist"})
     else:
+        dict_country = country.serialize_country()
+        dict_country['url'] = "http://127.0.0.1:5000/covid19/api/v1/countries/{}/states".format(rev_normalize(country.name))
         # Returns a country with covid-19 cases given country_id
-        return jsonify({"country":country.serialize_country()})
+        return jsonify({"country":dict_country})
 
+@app.route('/covid19/api/v1/countries/<country_name>/states', methods=['GET'])
+def get_country_states(country_name):
+    country_name = normalize(country_name)
+    country = Country.query.filter_by(name=country_name).first()
+    if country is None:
+        return jsonify({"message": "data does not exist"})
+    else:
+        # Returns states for country with covid-19 cases given country_id
+        get_states = State.query.filter_by(country_name=country.name).all()
+        states = [state.serialize_state() for state in get_states]
+        return jsonify(
+            {
+                "country":country.serialize_country(),
+                "states":states
+            }
+        )
+
+
+@app.route('/covid19/api/v1/countries/<string:country_name>/states/<string:state_name>', methods=['GET'])
+def get_country_state(country_name,state_name):
+    country_name = normalize(country_name)
+    state_name = normalize(state_name)
+    country = Country.query.filter_by(name=country_name).first()
+    if country is None:
+        return jsonify({"message": "data does not exist"})
+    else:
+        # Returns state for country with covid-19 cases given country_id
+        state = State.query.filter_by(name=state_name).first()
+        state = state.serialize_state()
+        state['url'] = "http://127.0.0.1:5000/covid19/api/v1/countries/{}/states".format(rev_normalize(country.name))
+        return jsonify(
+            {
+                "state":state
+            }
+        )
 
 @app.route('/covid19/api/v1/states', methods=['GET'])
 def get_states():
@@ -78,6 +124,7 @@ def get_sum():
                     "active": active,
                     "critical":critical,
                     "tests":tests
+
                 }
             })
     else:

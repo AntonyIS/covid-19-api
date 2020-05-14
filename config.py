@@ -1,10 +1,10 @@
 import os
 from os import environ
-import redis
+
 
 
 class Config(object):
-    ENV = 'prod'
+    ENV = 'dev'
     if ENV == 'dev':
         debug = True
         SQLALCHEMY_DATABASE_URI = "postgresql://postgres:GeoDev@localhost/covidapi"
