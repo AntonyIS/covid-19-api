@@ -69,25 +69,7 @@ def get_country_state(country_name,state_name):
             }
         )
 
-@app.route('/covid19/api/v1/states', methods=['GET'])
-def get_states():
-    states = State.query.all()
-    if len(states) <= 0 :
-        return jsonify({"message": "data does not exist"})
-    else:
-        # Returns all states with covid-19 cases given
-        return jsonify(states=[state.serialize(state) for state in states])
 
-
-@app.route('/covid19/api/v1/states/<int:state_id>', methods=['GET'])
-def get_state(state_id):
-    # Returns a state with covid-19 cases given state_id
-    try:
-        return jsonify({
-            "state": State.query.get(state_id).serialize(State.query.get(state_id)),
-        })
-    except:
-        return jsonify({"message": "data does not exist"})
 
 # Total data
 @app.route('/covid19/api/v1/sum', methods=['GET'])
