@@ -24,7 +24,6 @@ class Country(db.Model):
     active = db.Column(db.Integer, default=0)
     critical = db.Column(db.Integer, default=0)
     tests = db.Column(db.Integer, default=0)
-    url = db.Column(db.String)
 
     def __repr__(self):
         return self.name
@@ -43,7 +42,7 @@ class Country(db.Model):
             "active" : self.active,
             "critical" : self.critical,
             "tests" : self.tests,
-            "url":" http://127.0.0.1:5000/covid19/api/v1/countries/{}".format(rev_normalize(self.name))
+            "url":" https://covid19-datamap-api.herokuapp.com/covid19/api/v1/countries/{}".format(rev_normalize(self.name))
 
         }
 
@@ -85,5 +84,6 @@ class State(db.Model):
             "active" : self.active,
             "critical" : self.critical,
             "tests" : self.tests,
-            "url": " http://127.0.0.1:5000/covid19/api/v1/countries/{}/states/{}".format(rev_normalize(self.country_name),rev_normalize(self.name))
+            "url": " https://covid19-datamap-api.herokuapp.com/covid19/api/v1/countries/{}/states/{}".format(rev_normalize(self.country_name),rev_normalize(self.name))
+
         }
