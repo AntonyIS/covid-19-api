@@ -24,7 +24,7 @@ def get_countries():
 
 @app.route('/covid19/api/v1/countries/<string:country_name>', methods=['GET'])
 def get_country(country_name):
-    country = Country.query.filter_by(name=country_name).first()
+    country = Country.query.filter_by(name=normalize(country_name)).first()
     if country is None:
         return jsonify({"message": "data does not exist"})
     else:
