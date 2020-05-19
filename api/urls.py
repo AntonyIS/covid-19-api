@@ -17,11 +17,11 @@ def get_countries():
     countries = Country.query.all()
     if len(countries) <= 0 :
         # return jsonify({"message": "No data available"})
-        return countries
+        return jsonify({"dev":"dev"})
     else:
         # Returns all countries with covid-19 cases
         # return jsonify(countries=[country.serialize_country() for country in countries])
-        return countries
+        return jsonify({"dev":"dev"})
 
 
 @app.route('/covid19/api/v1/countries/<string:country_name>', methods=['GET'])
