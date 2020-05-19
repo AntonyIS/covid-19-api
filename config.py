@@ -1,8 +1,6 @@
 import os
 from os import environ
 
-
-
 class Config(object):
     ENV = 'prod'
     if ENV == 'dev':
