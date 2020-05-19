@@ -7,6 +7,7 @@ def scheduled_tasks():
     tasks.job()
 
 if __name__ == '__main__':
-    scheduler.add_job(id='Scheduled task', func=scheduled_tasks, trigger='interval', seconds=300)
-    scheduler.start()
+    # scheduler.add_job(id='Scheduled task', func=scheduled_tasks, trigger='interval', seconds=300)
+    # scheduler.start()
+    tasks.scrapper.add_countries()
     app.run()

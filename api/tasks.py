@@ -134,3 +134,5 @@ def job():
     end = time.time()
     print("Ending Tasks...{}".format(end-start))
 
+scrapper = Scrapper()
+scrapper.add_countries()
