@@ -123,13 +123,12 @@ class Serializer:
     def get_states_(self):
         return jsonify(state=[s.serialize for s in self.states])
 
+
 def job():
     print("Start task...")
     start = time.time()
     scrapper = Scrapper()
-    print("...dropping db")
     db.drop_all()
-    print("...creating db")
     db.create_all()
     scrapper.add_countries()
     end = time.time()

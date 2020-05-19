@@ -4,7 +4,7 @@ from os import environ
 
 
 class Config(object):
-    ENV = 'prod'
+    ENV = 'dev'
     if ENV == 'dev':
         debug = True
         SQLALCHEMY_DATABASE_URI = "postgresql://postgres:GeoDev@localhost/covidapi"
