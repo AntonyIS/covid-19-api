@@ -64,7 +64,7 @@ class Scrapper:
                 )
                 db.session.add(state_sample)
                 db.session.commit()
-                print(name,(tds[0].text).strip(),"...")
+                # print(name,(tds[0].text).strip(),"...")
         except:
             return False
 
@@ -89,7 +89,7 @@ class Scrapper:
                 critical=int((tds[8].text).replace(',', '')),
                 tests =int((tds[9].text).replace(',', '')),
             )
-            print(name,"...")
+            # print(name,"...")
             db.session.add(country_sample)
             db.session.commit()
             self.add_states(name)
