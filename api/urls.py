@@ -16,7 +16,8 @@ def rev_normalize(country_name):
 def get_countries():
     countries = Country.query.all()
     if len(countries) <= 0 :
-        return jsonify({"message": "No data available"})
+        # return jsonify({"message": "No data available"})
+        return countries
     else:
         # Returns all countries with covid-19 cases
         # return jsonify(countries=[country.serialize_country() for country in countries])
