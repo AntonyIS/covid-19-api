@@ -3,6 +3,7 @@ from flask_apscheduler import APScheduler
 
 
 scheduler = APScheduler()
+
 def scheduled_tasks():
     tasks.job()
 
