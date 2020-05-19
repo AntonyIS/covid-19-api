@@ -19,7 +19,8 @@ def get_countries():
         return jsonify({"message": "No data available"})
     else:
         # Returns all countries with covid-19 cases
-        return jsonify(countries=[country.serialize_country() for country in countries])
+        # return jsonify(countries=[country.serialize_country() for country in countries])
+        return countries
 
 
 @app.route('/covid19/api/v1/countries/<string:country_name>', methods=['GET'])
