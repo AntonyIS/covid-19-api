@@ -10,6 +10,6 @@ def scheduled_tasks():
 
 
 if __name__ == '__main__':
-    scheduler.add_job(id='Scheduled task', func=scheduled_tasks, trigger='interval', seconds=300)
+    scheduler.add_job(id='Scheduled task', func=scheduled_tasks, trigger='interval', seconds=1200)
     scheduler.start()
     app.run()
