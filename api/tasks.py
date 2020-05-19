@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 from api import db, jsonify
 from api.models import Country,State
+import time
 
 def rename(name):
     name = name.split()
@@ -9,7 +10,6 @@ def rename(name):
         return False
     elif len(name) == 1:
         return name[0].lower()
-
     elif len(name) == 2:
         item1 = name[0].lower()
         item2 = name[1].lower()
@@ -64,6 +64,7 @@ class Scrapper:
                 )
                 db.session.add(state_sample)
                 db.session.commit()
+                print(name,(tds[0].text).strip(),"...")
         except:
             return False
 
@@ -88,6 +89,7 @@ class Scrapper:
                 critical=int((tds[8].text).replace(',', '')),
                 tests =int((tds[9].text).replace(',', '')),
             )
+            print(name,"...")
             db.session.add(country_sample)
             db.session.commit()
             self.add_states(name)
@@ -123,8 +125,13 @@ class Serializer:
 
 def job():
     print("Start task...")
+    start = time.time()
     scrapper = Scrapper()
+    print("...dropping db")
     db.drop_all()
     db.create_all()
+    print("...creating db")
     scrapper.add_countries()
-    print("Ending Tasks...")
+    end = time.time()
+    print("Ending Tasks...{}".format(end-start))
+
