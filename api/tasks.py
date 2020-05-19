@@ -124,14 +124,14 @@ class Serializer:
         return jsonify(state=[s.serialize for s in self.states])
 
 
-def job():
-    print("Start task...")
-    start = time.time()
-    scrapper = Scrapper()
-    db.drop_all()
-    db.create_all()
-    scrapper.add_countries()
-    end = time.time()
-    print("Ending Tasks...{}".format(end-start))
+# def job():
+#     print("Start task...")
+#     start = time.time()
+#     scrapper = Scrapper()
+#     db.drop_all()
+#     db.create_all()
+#     scrapper.add_countries()
+#     end = time.time()
+#     print("Ending Tasks...{}".format(end-start))
 
 scrapper = Scrapper()
