@@ -1,15 +1,16 @@
 from api import app, tasks
 from flask_apscheduler import APScheduler
 
-
-scheduler = APScheduler()
-
+from apscheduler.schedulers.background import BackgroundScheduler
 
 def scheduled_tasks():
     tasks.job()
 
 
+
 if __name__ == '__main__':
-    scheduler.add_job(id='Scheduled task', func=scheduled_tasks, trigger='interval', seconds=300)
-    scheduler.start()
+    sched = BackgroundScheduler(daemon=True)
+    sched.add_job(scheduled_tasks, 'interval', minutes=5)
+    sched.start()
+    scheduler = APScheduler()
     app.run()

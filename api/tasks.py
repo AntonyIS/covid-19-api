@@ -89,7 +89,7 @@ class Scrapper:
                 critical=int((tds[8].text).replace(',', '')),
                 tests =int((tds[9].text).replace(',', '')),
             )
-            # print(name,"...")
+            print(name,"...", country_sample.total_infected)
             db.session.add(country_sample)
             db.session.commit()
             self.add_states(name)
